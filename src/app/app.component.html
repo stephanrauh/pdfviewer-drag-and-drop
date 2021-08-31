@@ -1,22 +1,26 @@
-<hello name="{{ name }}"></hello>
-<p>
-  Start editing to see some magic happen :)
-</p>
+<p>Start editing to see some magic happen :)</p>
 
 <div>
-  <div class="drag-drop">
-    <div class="text-primary-main-dgray text-sm">+ Drag your Signature</div>
-  </div>
+
 
   <div class="dropzone">
     <app-pdf-viewer
+      *ngIf="false"
       #pdfViewer
-      *ngIf="pdfSrc"
       [pdfSrc]="pdfSrc"
       [zoom]="5.0"
     ></app-pdf-viewer>
 
-    <!-- <ngx-extended-pdf-viewer [src]="pdfSrc" useBrowserLocale="true" height="80vh" [enableDragAndDrop]="true"
-      [showUnverifiedSignatures]="true"></ngx-extended-pdf-viewer> -->
+    <ngx-extended-pdf-viewer
+      *ngIf="true"
+      [src]="pdfSrc"
+      [useBrowserLocale]="true"
+      height="80vh"
+      [enableDragAndDrop]="true"
+      [showUnverifiedSignatures]="true"
+    ></ngx-extended-pdf-viewer>
+  </div>
+  <div class="drag-drop">
+    <div class="text-primary-main-dgray text-sm">+ Drag your Signature</div>
   </div>
 </div>

@@ -8,8 +8,6 @@ import {
   EventEmitter
 } from '@angular/core';
 
-import { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
-
 let PDFJS: any;
 
 function isSSR() {
@@ -28,11 +26,11 @@ interface IPdfDocumentLoad {
 @Component({
   selector: 'app-pdf-viewer',
   templateUrl: './pdf-viewer.component.html',
-  styleUrls: ['./pdf-viewer.component.scss']
+  styleUrls: ['./pdf-viewer.component.css']
 })
 export class PDFViewerComponent implements OnInit {
   @Input()
-  pdfSrc: string;
+  pdfSrc: string = '';
 
   @Input()
   pageNumber = 1;
@@ -82,7 +80,7 @@ export class PDFViewerComponent implements OnInit {
     }
   }
 
-  async ngOnChanges(changes) {
+  async ngOnChanges(changes: { pageNumber: { currentValue: any; }; }) {
     if (!this._pdfDocument) {
       return;
     }
@@ -104,22 +102,22 @@ export class PDFViewerComponent implements OnInit {
     }
   }
 
-  isValidPageNumberRequest(requestedPage) {
+  isValidPageNumberRequest(requestedPage: number) {
     return requestedPage > 0 && requestedPage <= this.getNumPages();
   }
 
   private async getDocument() {
     const loadingTask = PDFJS.getDocument(this.pdfSrc);
-    return loadingTask.promise.then(function(pdfDocument) {
+    return loadingTask.promise.then(function(pdfDocument: unknown) {
       return new Promise(resolve => resolve(pdfDocument));
     });
   }
 
-  private async getPage(page): Promise<PDFPageProxy> {
+  private async getPage(page: number): Promise<any> {
     return await this._pdfDocument.getPage(page);
   }
 
-  private getCanvas(viewport): HTMLCanvasElement {
+  private getCanvas(viewport: { height: any; width: any; }): HTMLCanvasElement {
     const canvas: any = document.getElementById('pdfCanvas');
     canvas.height = viewport.height;
     canvas.width = viewport.width;
@@ -131,7 +129,7 @@ export class PDFViewerComponent implements OnInit {
     const viewport = page.getViewport({ scale: this.zoom });
     const canvas: HTMLCanvasElement = this.getCanvas(viewport);
 
-    const context: CanvasRenderingContext2D = canvas.getContext('2d');
+    const context = canvas.getContext('2d') as CanvasRenderingContext2D;
 
     const task = page.render({
       canvasContext: context,

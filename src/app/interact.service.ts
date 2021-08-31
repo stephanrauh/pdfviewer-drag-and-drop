@@ -35,7 +35,7 @@ export class InteractService {
         const imageUrl =
           'https://upload.wikimedia.org/wikipedia/commons/a/ac/Chris_Hemsworth_Signature.png';
         draggableElement.style.backgroundImage = `url('${imageUrl}')`;
-        draggableElement.style.backgroundRepeat = 'no-repeat';
+        draggableElement.style.backgroundRepeat = 'round';
         draggableElement.style.border = 'thin dotted black';
         draggableElement.style.width = '400px';
         draggableElement.style.height = '120px';
@@ -46,6 +46,7 @@ export class InteractService {
         event.target.classList.remove('drop-target');
         event.relatedTarget.classList.remove('can-drop');
         event.relatedTarget.textContent = 'Dragged out';
+        event.relatedTarget.style.backgroundImage='';
       },
       ondropdeactivate: function(event) {
         // remove active dropzone feedback
@@ -80,9 +81,12 @@ export class InteractService {
         },
         // call this function on every dragend event
         end: e => {
-          const canvas: HTMLCanvasElement = <HTMLCanvasElement>(
+          let canvas: HTMLCanvasElement = <HTMLCanvasElement>(
             document.getElementById('pdfCanvas')
           );
+          if (!canvas) {
+            canvas = document.querySelector('.canvasWrapper > canvas') as HTMLCanvasElement;
+          }
           const rect = canvas.getBoundingClientRect();
           const elementRelativeLX = e.client.x - rect.left;
           const elementRelativeRX = e.client.x - rect.right;
